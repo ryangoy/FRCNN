@@ -559,10 +559,10 @@ layer {
   bottom: "fc6"
   top: "fc7_UIC"
   param {
-    lr_mult: 100
+    lr_mult: 1
   }
   param {
-    lr_mult: 200
+    lr_mult: 2
   }
   inner_product_param {
     num_output: 4096

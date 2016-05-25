@@ -130,7 +130,7 @@ if __name__ == '__main__':
     #caffemodel = os.path.join(cfg.DATA_DIR, 'faster_rcnn_models',
     #                          NETS[args.demo_net][1])
     caffemodel = '/home/ryan/vision/py-faster-rcnn/models/coco/VGG16/faster_rcnn_end2end/coco_vgg16_faster_rcnn_final.caffemodel'
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_1000.caffemodel'
+    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_100.caffemodel'
     if not os.path.isfile(caffemodel):
         raise IOError(('{:s} not found.\nDid you run ./data/script/'
                        'fetch_faster_rcnn_models.sh?').format(caffemodel))
