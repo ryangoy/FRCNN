@@ -575,10 +575,10 @@ layer {
   top: "fc7_UIC"
 }
 layer {
-  name: "cls_score"
+  name: "cls_score_2"
   type: "InnerProduct"
   bottom: "fc7_UIC"
-  top: "cls_score"
+  top: "cls_score_2"
   param {
     lr_mult: 1
   }
@@ -586,7 +586,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 8
+    num_output: 2
     weight_filler {
       type: "gaussian"
       std: 0.01
@@ -598,10 +598,10 @@ layer {
   }
 }
 layer {
-  name: "bbox_pred"
+  name: "bbox_pred_2"
   type: "InnerProduct"
   bottom: "fc7_UIC"
-  top: "bbox_pred"
+  top: "bbox_pred_2"
   param {
     lr_mult: 1
   }
@@ -623,7 +623,7 @@ layer {
 layer {
   name: "loss_cls"
   type: "SoftmaxWithLoss"
-  bottom: "cls_score"
+  bottom: "cls_score_2"
   bottom: "labels"
   propagate_down: 1
   propagate_down: 0
@@ -633,7 +633,7 @@ layer {
 layer {
   name: "loss_bbox"
   type: "SmoothL1Loss"
-  bottom: "bbox_pred"
+  bottom: "bbox_pred_2"
   bottom: "bbox_targets"
   bottom: "bbox_inside_weights"
   bottom: "bbox_outside_weights"
