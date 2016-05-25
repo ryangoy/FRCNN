@@ -65,7 +65,7 @@ def combined_roidb(imdb_names):
         print 'Set proposal method: {:s}'.format(cfg.TRAIN.PROPOSAL_METHOD)
         roidb = get_training_roidb(imdb)
         return roidb
-
+    
     roidbs = [get_roidb(s) for s in imdb_names.split('+')]
     roidb = roidbs[0]
     if len(roidbs) > 1:
@@ -100,7 +100,6 @@ if __name__ == '__main__':
     # set up caffe
     caffe.set_mode_gpu()
     caffe.set_device(args.gpu_id)
-
     imdb, roidb = combined_roidb(args.imdb_name)
     print '{:d} roidb entries'.format(len(roidb))
 

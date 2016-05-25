@@ -11,8 +11,24 @@ __sets = {}
 
 from datasets.pascal_voc import pascal_voc
 from datasets.coco import coco
+from datasets.imagenet import imagenet
+from datasets.ir import ir
 import numpy as np
+import datasets.imagenet
+#UIC_devkit_path = '/home/ryan/vision/UIC_test/'
+#for split in ['train', 'test']:
+#    name = 'UIC_test_{}'.format(split)
+#    __sets[name] = (lambda split=split: imagenet(split, devkit_path=UIC_devkit_path))
+ir_devkit_path = '/home/ryan/vision/ir_dataset/'
+for split in ['train', 'test']:
+    name = 'ir_{}'.format(split)
+    __sets[name] = (lambda split=split: ir(split, devkit_path=ir_devkit_path))
 
+
+imagenet_devkit_path = '/home/ryan/vision/computer_dataset/'
+for split in ['train', 'test']:
+    name = 'desktops_{}'.format(split)
+    __sets[name] = (lambda split=split: imagenet(split, devkit_path=imagenet_devkit_path))
 # Set up voc_<year>_<split> using selective search "fast" mode
 for year in ['2007', '2012']:
     for split in ['train', 'val', 'trainval', 'test']:
