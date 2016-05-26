@@ -85,14 +85,6 @@ def demo(net, image_name):
     # Visualize detections for each class
     CONF_THRESH = 0.015
     NMS_THRESH = 0.3
-    #for cls_ind in range(1,scores.shape[1]):
-    #	cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind+1)]
-    #	cls_scores = scores[:, cls_ind]
-    #	dets = np.hstack((cls_boxes,
-    #                      cls_scores[:, np.newaxis])).astype(np.float32)
-    #    keep = nms(dets, NMS_THRESH)
-    #    dets = dets[keep, :]
-    #    vis_detections(im, str(cls_ind), dets, thresh=CONF_THRESH)
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
@@ -130,7 +122,7 @@ if __name__ == '__main__':
     #caffemodel = os.path.join(cfg.DATA_DIR, 'faster_rcnn_models',
     #                          NETS[args.demo_net][1])
     caffemodel = '/home/ryan/vision/py-faster-rcnn/models/coco/VGG16/faster_rcnn_end2end/coco_vgg16_faster_rcnn_final.caffemodel'
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_100.caffemodel'
+    #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_100.caffemodel'
     if not os.path.isfile(caffemodel):
         raise IOError(('{:s} not found.\nDid you run ./data/script/'
                        'fetch_faster_rcnn_models.sh?').format(caffemodel))

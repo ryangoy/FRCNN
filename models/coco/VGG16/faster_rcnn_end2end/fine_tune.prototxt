@@ -8,7 +8,7 @@ layer {
   python_param {
     module: 'roi_data_layer.layer'
     layer: 'RoIDataLayer'
-    param_str: "'num_classes': 81"
+    param_str: "'num_classes': 2"
   }
 }
 
@@ -554,10 +554,10 @@ layer {
   top: "fc6"
 }
 layer {
-  name: "fc7_UIC"
+  name: "fc7_ft"
   type: "InnerProduct"
   bottom: "fc6"
-  top: "fc7_UIC"
+  top: "fc7_ft"
   param {
     lr_mult: 1
   }
@@ -571,13 +571,13 @@ layer {
 layer {
   name: "relu7"
   type: "ReLU"
-  bottom: "fc7_UIC"
-  top: "fc7_UIC"
+  bottom: "fc7_ft"
+  top: "fc7_ft"
 }
 layer {
   name: "cls_score"
   type: "InnerProduct"
-  bottom: "fc7_UIC"
+  bottom: "fc7_"
   top: "cls_score"
   param {
     lr_mult: 1 
@@ -586,7 +586,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 81
+    num_output: 2
     weight_filler {
       type: "gaussian"
       std: 0.01
@@ -600,7 +600,7 @@ layer {
 layer {
   name: "bbox_pred"
   type: "InnerProduct"
-  bottom: "fc7_UIC"
+  bottom: "fc7_ft"
   top: "bbox_pred"
   param {
     lr_mult: 1
@@ -609,7 +609,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 324
+    num_output: 8
     weight_filler {
       type: "gaussian"
       std: 0.001

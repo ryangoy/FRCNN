@@ -8,7 +8,7 @@ layer {
   python_param {
     module: 'roi_data_layer.layer'
     layer: 'RoIDataLayer'
-    param_str: "'num_classes': 81"
+    param_str: "'num_classes': 2"
   }
 }
 
@@ -395,7 +395,7 @@ layer {
   param { lr_mult: 1.0 }
   param { lr_mult: 2.0 }
   convolution_param {
-    num_output: 24   # 2(bg/fg) * 12(anchors)
+    num_output: 18   # 2(bg/fg) * 9(anchors)
     kernel_size: 1 pad: 0 stride: 1
     weight_filler { type: "gaussian" std: 0.01 }
     bias_filler { type: "constant" value: 0 }
@@ -410,7 +410,7 @@ layer {
   param { lr_mult: 1.0 }
   param { lr_mult: 2.0 }
   convolution_param {
-    num_output: 48   # 4 * 12(anchors)
+    num_output: 36   # 4 * 9(anchors)
     kernel_size: 1 pad: 0 stride: 1
     weight_filler { type: "gaussian" std: 0.01 }
     bias_filler { type: "constant" value: 0 }
@@ -439,7 +439,7 @@ layer {
   python_param {
     module: 'rpn.anchor_target_layer'
     layer: 'AnchorTargetLayer'
-    param_str: "'feat_stride': 16 \n'scales': !!python/tuple [4, 8, 16, 32]"
+    param_str: "'feat_stride': 16"
   }
 }
 
@@ -484,7 +484,7 @@ layer {
   type: 'Reshape'
   bottom: 'rpn_cls_prob'
   top: 'rpn_cls_prob_reshape'
-  reshape_param { shape { dim: 0 dim: 24 dim: -1 dim: 0 } }
+  reshape_param { shape { dim: 0 dim: 18 dim: -1 dim: 0 } }
 }
 
 layer {
@@ -494,12 +494,25 @@ layer {
   bottom: 'rpn_bbox_pred'
   bottom: 'im_info'
   top: 'rpn_rois'
+#  top: 'rpn_scores'
   python_param {
     module: 'rpn.proposal_layer'
     layer: 'ProposalLayer'
-    param_str: "'feat_stride': 16 \n'scales': !!python/tuple [4, 8, 16, 32]"
+    param_str: "'feat_stride': 16"
   }
 }
+
+#layer {
+#  name: 'debug-data'
+#  type: 'Python'
+#  bottom: 'data'
+#  bottom: 'rpn_rois'
+#  bottom: 'rpn_scores'
+#  python_param {
+#    module: 'rpn.debug_layer'
+#    layer: 'RPNDebugLayer'
+#  }
+#}
 
 layer {
   name: 'roi-data'
@@ -514,7 +527,7 @@ layer {
   python_param {
     module: 'rpn.proposal_target_layer'
     layer: 'ProposalTargetLayer'
-    param_str: "'num_classes': 81"
+    param_str: "'num_classes': 2"
   }
 }
 
@@ -554,10 +567,19 @@ layer {
   top: "fc6"
 }
 layer {
-  name: "fc7"
+  name: "drop6"
+  type: "Dropout"
+  bottom: "fc6"
+  top: "fc6"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "fc7_ft"
   type: "InnerProduct"
   bottom: "fc6"
-  top: "fc7"
+  top: "fc7_ft"
   param {
     lr_mult: 1
   }
@@ -571,13 +593,22 @@ layer {
 layer {
   name: "relu7"
   type: "ReLU"
-  bottom: "fc7"
-  top: "fc7"
+  bottom: "fc7_ft"
+  top: "fc7_ft"
+}
+layer {
+  name: "drop7"
+  type: "Dropout"
+  bottom: "fc7_ft"
+  top: "fc7_ft"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
 }
 layer {
   name: "cls_score"
   type: "InnerProduct"
-  bottom: "fc7"
+  bottom: "fc7_ft"
   top: "cls_score"
   param {
     lr_mult: 1
@@ -586,7 +617,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 81
+    num_output: 2
     weight_filler {
       type: "gaussian"
       std: 0.01
@@ -600,7 +631,7 @@ layer {
 layer {
   name: "bbox_pred"
   type: "InnerProduct"
-  bottom: "fc7"
+  bottom: "fc7_ft"
   top: "bbox_pred"
   param {
     lr_mult: 1
@@ -609,7 +640,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 324
+    num_output: 8
     weight_filler {
       type: "gaussian"
       std: 0.001
