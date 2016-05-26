@@ -1,15 +1,17 @@
 name: "VGG_ILSVRC_16_layers"
-layer {
-  name: 'input-data'
-  type: 'Python'
-  top: 'data'
-  top: 'im_info'
-  top: 'gt_boxes'
-  python_param {
-    module: 'roi_data_layer.layer'
-    layer: 'RoIDataLayer'
-    param_str: "'num_classes': 2"
-  }
+
+input: "data"
+input_shape {
+  dim: 1
+  dim: 3
+  dim: 224
+  dim: 224
+}
+
+input: "im_info"
+input_shape {
+  dim: 1
+  dim: 3
 }
 
 layer {
@@ -141,9 +143,11 @@ layer {
   top: "conv3_1"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 256
@@ -164,9 +168,11 @@ layer {
   top: "conv3_2"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 256
@@ -187,9 +193,11 @@ layer {
   top: "conv3_3"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 256
@@ -221,9 +229,11 @@ layer {
   top: "conv4_1"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 512
@@ -244,9 +254,11 @@ layer {
   top: "conv4_2"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 512
@@ -267,9 +279,11 @@ layer {
   top: "conv4_3"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 512
@@ -301,9 +315,11 @@ layer {
   top: "conv5_1"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 512
@@ -324,9 +340,11 @@ layer {
   top: "conv5_2"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 512
@@ -347,9 +365,11 @@ layer {
   top: "conv5_3"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   convolution_param {
     num_output: 512
@@ -371,8 +391,8 @@ layer {
   type: "Convolution"
   bottom: "conv5_3"
   top: "rpn/output"
-  param { lr_mult: 1.0 }
-  param { lr_mult: 2.0 }
+  param { lr_mult: 1.0 decay_mult: 1.0 }
+  param { lr_mult: 2.0 decay_mult: 0 }
   convolution_param {
     num_output: 512
     kernel_size: 3 pad: 1 stride: 1
@@ -392,8 +412,8 @@ layer {
   type: "Convolution"
   bottom: "rpn/output"
   top: "rpn_cls_score"
-  param { lr_mult: 1.0 }
-  param { lr_mult: 2.0 }
+  param { lr_mult: 1.0 decay_mult: 1.0 }
+  param { lr_mult: 2.0 decay_mult: 0 }
   convolution_param {
     num_output: 24   # 2(bg/fg) * 12(anchors)
     kernel_size: 1 pad: 0 stride: 1
@@ -401,14 +421,13 @@ layer {
     bias_filler { type: "constant" value: 0 }
   }
 }
-
 layer {
   name: "rpn_bbox_pred"
   type: "Convolution"
   bottom: "rpn/output"
   top: "rpn_bbox_pred"
-  param { lr_mult: 1.0 }
-  param { lr_mult: 2.0 }
+  param { lr_mult: 1.0 decay_mult: 1.0 }
+  param { lr_mult: 2.0 decay_mult: 0 }
   convolution_param {
     num_output: 48   # 4 * 12(anchors)
     kernel_size: 1 pad: 0 stride: 1
@@ -416,58 +435,12 @@ layer {
     bias_filler { type: "constant" value: 0 }
   }
 }
-
 layer {
    bottom: "rpn_cls_score"
    top: "rpn_cls_score_reshape"
    name: "rpn_cls_score_reshape"
    type: "Reshape"
    reshape_param { shape { dim: 0 dim: 2 dim: -1 dim: 0 } }
-}
-
-layer {
-  name: 'rpn-data'
-  type: 'Python'
-  bottom: 'rpn_cls_score'
-  bottom: 'gt_boxes'
-  bottom: 'im_info'
-  bottom: 'data'
-  top: 'rpn_labels'
-  top: 'rpn_bbox_targets'
-  top: 'rpn_bbox_inside_weights'
-  top: 'rpn_bbox_outside_weights'
-  python_param {
-    module: 'rpn.anchor_target_layer'
-    layer: 'AnchorTargetLayer'
-    param_str: "'feat_stride': 16 \n'scales': !!python/tuple [4, 8, 16, 32]"
-  }
-}
-
-layer {
-  name: "rpn_loss_cls"
-  type: "SoftmaxWithLoss"
-  bottom: "rpn_cls_score_reshape"
-  bottom: "rpn_labels"
-  propagate_down: 1
-  propagate_down: 0
-  top: "rpn_cls_loss"
-  loss_weight: 1
-  loss_param {
-    ignore_label: -1
-    normalize: true
-  }
-}
-
-layer {
-  name: "rpn_loss_bbox"
-  type: "SmoothL1Loss"
-  bottom: "rpn_bbox_pred"
-  bottom: "rpn_bbox_targets"
-  bottom: 'rpn_bbox_inside_weights'
-  bottom: 'rpn_bbox_outside_weights'
-  top: "rpn_loss_bbox"
-  loss_weight: 1
-  smooth_l1_loss_param { sigma: 3.0 }
 }
 
 #========= RoI Proposal ============
@@ -478,7 +451,6 @@ layer {
   bottom: "rpn_cls_score_reshape"
   top: "rpn_cls_prob"
 }
-
 layer {
   name: 'rpn_cls_prob_reshape'
   type: 'Reshape'
@@ -486,35 +458,17 @@ layer {
   top: 'rpn_cls_prob_reshape'
   reshape_param { shape { dim: 0 dim: 24 dim: -1 dim: 0 } }
 }
-
 layer {
   name: 'proposal'
   type: 'Python'
   bottom: 'rpn_cls_prob_reshape'
   bottom: 'rpn_bbox_pred'
   bottom: 'im_info'
-  top: 'rpn_rois'
+  top: 'rois'
   python_param {
     module: 'rpn.proposal_layer'
     layer: 'ProposalLayer'
     param_str: "'feat_stride': 16 \n'scales': !!python/tuple [4, 8, 16, 32]"
-  }
-}
-
-layer {
-  name: 'roi-data'
-  type: 'Python'
-  bottom: 'rpn_rois'
-  bottom: 'gt_boxes'
-  top: 'rois'
-  top: 'labels'
-  top: 'bbox_targets'
-  top: 'bbox_inside_weights'
-  top: 'bbox_outside_weights'
-  python_param {
-    module: 'rpn.proposal_target_layer'
-    layer: 'ProposalTargetLayer'
-    param_str: "'num_classes': 2"
   }
 }
 
@@ -539,9 +493,11 @@ layer {
   top: "fc6"
   param {
     lr_mult: 1
+    decay_mult: 1
   }
   param {
     lr_mult: 2
+    decay_mult: 0
   }
   inner_product_param {
     num_output: 4096
@@ -559,10 +515,12 @@ layer {
   bottom: "fc6"
   top: "fc7_ft"
   param {
-    lr_mult: 100
+    lr_mult: 1
+    decay_mult: 1
   }
   param {
-    lr_mult: 200
+    lr_mult: 2
+    decay_mult: 0
   }
   inner_product_param {
     num_output: 4096
@@ -580,13 +538,15 @@ layer {
   bottom: "fc7_ft"
   top: "cls_score_ft"
   param {
-    lr_mult: 100
+    lr_mult: 1
+    decay_mult: 1
   }
   param {
-    lr_mult: 200
+    lr_mult: 2
+    decay_mult: 0
   }
   inner_product_param {
-    num_output: 2
+    num_output: 2 
     weight_filler {
       type: "gaussian"
       std: 0.01
@@ -603,13 +563,15 @@ layer {
   bottom: "fc7_ft"
   top: "bbox_pred_ft"
   param {
-    lr_mult: 100
+    lr_mult: 1
+    decay_mult: 1
   }
   param {
-    lr_mult: 200
+    lr_mult: 2
+    decay_mult: 0
   }
   inner_product_param {
-    num_output: 8
+    num_output: 8 
     weight_filler {
       type: "gaussian"
       std: 0.001
@@ -621,22 +583,8 @@ layer {
   }
 }
 layer {
-  name: "loss_cls"
-  type: "SoftmaxWithLoss"
+  name: "cls_prob"
+  type: "Softmax"
   bottom: "cls_score_ft"
-  bottom: "labels"
-  propagate_down: 1
-  propagate_down: 0
-  top: "loss_cls"
-  loss_weight: 1
-}
-layer {
-  name: "loss_bbox"
-  type: "SmoothL1Loss"
-  bottom: "bbox_pred_ft"
-  bottom: "bbox_targets"
-  bottom: "bbox_inside_weights"
-  bottom: "bbox_outside_weights"
-  top: "loss_bbox"
-  loss_weight: 1
+  top: "cls_prob"
 }

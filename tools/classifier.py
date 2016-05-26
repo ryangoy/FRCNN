@@ -25,24 +25,12 @@ import scipy.io as sio
 import caffe, os, sys, cv2
 import argparse
 
-
-CLASSES = ('__background__',
-           'aeroplane', 'bicycle', 'bird', 'boat',
-           'bottle', 'bus', 'car', 'cat', 'chair',
-           'cow', 'diningtable', 'dog', 'horse',
-           'motorbike', 'person', 'pottedplant',
-           'sheep', 'sofa', 'train', 'tvmonitor')
-
-#CLASSES = ('__background__',
-#            'tvmonitor', 'computer', 'laptop')
-
 CLASSES = ('__background__', 'n03180011')
 
 NETS = {'vgg16': ('VGG16',
                   'VGG16_faster_rcnn_final.caffemodel'),
         'zf': ('ZF',
                   'ZF_faster_rcnn_final.caffemodel')}
-
 
 def vis_detections(im, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
@@ -92,13 +80,13 @@ def demo(net, image_name):
            '{:d} object proposals').format(timer.total_time, boxes.shape[0])
 
     # Visualize detections for each class
-    CONF_THRESH = 0.6
+    CONF_THRESH = 0.8
     NMS_THRESH = 0.3
     for cls_ind in range(1,scores.shape[1]):
-	cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind+1)]
-	cls_scores = scores[:, cls_ind]
-	dets = np.hstack((cls_boxes,
-                          cls_scores[:, np.newaxis])).astype(np.float32)
+        cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind+1)]
+        cls_scores = scores[:, cls_ind]
+        dets = np.hstack((cls_boxes,
+                              cls_scores[:, np.newaxis])).astype(np.float32)
         keep = nms(dets, NMS_THRESH)
         dets = dets[keep, :]
         vis_detections(im, str(cls_ind), dets, thresh=CONF_THRESH)
@@ -110,8 +98,8 @@ def demo(net, image_name):
     #                      cls_scores[:, np.newaxis])).astype(np.float32)
     #    keep = nms(dets, NMS_THRESH)
     #    dets = dets[keep, :]
-    #    vis_detections(im, cls_ind, dets, thresh=CONF_THRESH)
-    plt.savefig('./output/' + str(image_name).split('.')[0] + '.png')
+    #    vis_detections(im, cls, dets, thresh=CONF_THRESH)
+    plt.savefig('/home/ryan/vision/output/' + str(image_name).split('.')[0] + '.png')
 
 def parse_args():
     """Parse input arguments."""
@@ -138,8 +126,9 @@ if __name__ == '__main__':
     prototxt = '/home/ryan/vision/py-faster-rcnn/models/imagenet/VGG16/faster_rcnn_end2end/test.prototxt'
     #caffemodel = os.path.join(cfg.DATA_DIR, 'faster_rcnn_models',
     #                          NETS[args.demo_net][1])
-#    caffemodel = '/home/ryan/vision/py-faster-rcnn/models/coco/VGG16/faster_rcnn_end2end/coco_vgg16_faster_rcnn_final.caffemodel'
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/imagenet_train/vgg16_faster_rcnn_iter_1000.caffemodel'
+    #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/imagenet_train/vgg16_faster_rcnn_iter_1000.caffemodel'
+    #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v2.caffemodel'
+    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_1000.caffemodel'
     if not os.path.isfile(caffemodel):
         raise IOError(('{:s} not found.\nDid you run ./data/script/'
                        'fetch_faster_rcnn_models.sh?').format(caffemodel))
@@ -164,11 +153,11 @@ if __name__ == '__main__':
 	if f != '.DS_Store':
 	    im_names.append(f)
 
-    limit = 100
+    limit = 10
     count = 0
     namez = ["n03180011_6930.JPEG", "n03180011_8062.JPEG", "n03180011_5662.JPEG"]
-    for im_name in namez:
-    #for im_name in im_names:
+    #for im_name in namez:
+    for im_name in im_names:
         if limit < count:
             break
         count+=1

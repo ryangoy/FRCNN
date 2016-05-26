@@ -28,7 +28,7 @@ import argparse
 
 CLASSES = ('__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus','train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'stop sign', 'parking meter','bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack','umbrella', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 'kite','baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl','banana', 'apple', 'sandwich', 'orange', 'broccoli','carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch', 'potted plant', 'bed', 'dining table','toilet', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave', 'oven','toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier','toothbrush')
 
-CLASSES = ('__background__', 'tv')
+#CLASSES = ('__background__', 'tv')
 NETS = {'vgg16': ('VGG16',
                   'VGG16_faster_rcnn_final.caffemodel'),
         'zf': ('ZF',
@@ -83,7 +83,7 @@ def demo(net, image_name):
            '{:d} object proposals').format(timer.total_time, boxes.shape[0])
 
     # Visualize detections for each class
-    CONF_THRESH = 0.015
+    CONF_THRESH = 0.7
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     prototxt = '/home/ryan/vision/py-faster-rcnn/models/coco/VGG16/faster_rcnn_end2end/test.prototxt'
     #caffemodel = os.path.join(cfg.DATA_DIR, 'faster_rcnn_models',
     #                          NETS[args.demo_net][1])
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/models/coco/VGG16/faster_rcnn_end2end/coco_vgg16_faster_rcnn_final.caffemodel'
+    caffemodel = '/home/ryan/vision/py-faster-rcnn/data/coco_models/VGG16.v2.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_100.caffemodel'
     if not os.path.isfile(caffemodel):
         raise IOError(('{:s} not found.\nDid you run ./data/script/'
@@ -147,7 +147,7 @@ if __name__ == '__main__':
 	if f != '.DS_Store':
 	    im_names.append(f)
 
-    limit = 100 
+    limit = 10 
     count = 0
     for im_name in im_names:
         if limit < count:

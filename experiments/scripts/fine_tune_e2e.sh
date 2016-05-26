@@ -29,7 +29,8 @@ case $DATASET in
     PT_DIR="pascal_voc"
     ;;
   coco)
-    TRAIN_IMDB="coco_2014_train"
+    TRAIN_IMDB="desktops_train"
+    #TRAIN_IMDB="coco_2014_train"
     TEST_IMDB="coco_2014_minival"
     PT_DIR="coco"
     ;;
@@ -54,12 +55,13 @@ exec &> >(tee -a "$LOG")
 echo Logging output to "$LOG"
 echo "$PT_DIR"
 time ./tools/train_net.py --gpu ${GPU_ID} \
-  --solver models/${PT_DIR}/${NET}/faster_rcnn_end2end/solver_ft.prototxt \
-  --weights data/${PT_DIR}_models/${NET}.v2.caffemodel \
+  --solver ./models/${PT_DIR}/${NET}/faster_rcnn_end2end/solver.prototxt \
+  --weights ./data/${PT_DIR}_models/${NET}.v3.caffemodel \
   --imdb ${TRAIN_IMDB} \
   --iters ${ITERS} \
-  --cfg experiments/cfgs/faster_rcnn_end2end.yml \
+  --cfg ./experiments/cfgs/faster_rcnn_end2end.yml \
   ${EXTRA_ARGS}
+#--weights data/${PT_DIR}_models/${NET}.v2.caffemodel \
 #   --weights models/coco/${NET}/faster_rcnn_end2end/coco_vgg16_faster_rcnn_final.caffemodel \
 set +x
 NET_FINAL=`grep -B 1 "done solving" ${LOG} | grep "Wrote snapshot" | awk '{print $4}'`
