@@ -153,7 +153,7 @@ if __name__ == '__main__':
 	if f != '.DS_Store':
 	    im_names.append(f)
 
-    limit = 10
+    limit = 100
     count = 0
     namez = ["n03180011_6930.JPEG", "n03180011_8062.JPEG", "n03180011_5662.JPEG"]
     #for im_name in namez:
