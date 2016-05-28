@@ -15,21 +15,20 @@ from datasets.imagenet import imagenet
 from datasets.ir import ir
 import numpy as np
 import datasets.imagenet
-#UIC_devkit_path = '/home/ryan/vision/UIC_test/'
-#for split in ['train', 'test']:
-#    name = 'UIC_test_{}'.format(split)
-#    __sets[name] = (lambda split=split: imagenet(split, devkit_path=UIC_devkit_path))
+
+##### FOR NEW DATASETS CHANGE DEVKIT PATH #####
+ir_devkit_path = '/home/ryan/vision/ir_dataset/'
+imagenet_devkit_path = 'home/ryan/vision/computer_dataset/'
+
 for split in ['train', 'val', 'val1', 'val2', 'test']:
     name = 'imagenet_{}'.format(split)
     devkit_path = '/media/VSlab2/imagenet/ILSVRC13'
     __sets[name] = (lambda split=split, devkit_path=devkit_path:datasets.imagenet.imagenet(split,devkit_path))
-ir_devkit_path = '/home/ryan/vision/ir_dataset/'
+
 for split in ['train', 'test']:
     name = 'ir_{}'.format(split)
     __sets[name] = (lambda split=split: ir(split, devkit_path=ir_devkit_path))
 
-
-imagenet_devkit_path = '/home/ryan/vision/computer_dataset/'
 for split in ['train', 'test']:
     name = 'desktops_{}'.format(split)
     __sets[name] = (lambda split=split: imagenet(split, devkit_path=imagenet_devkit_path))

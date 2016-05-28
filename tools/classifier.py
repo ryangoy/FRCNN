@@ -100,6 +100,7 @@ def demo(net, image_name):
     #    dets = dets[keep, :]
     #    vis_detections(im, cls, dets, thresh=CONF_THRESH)
     plt.savefig('/home/ryan/vision/output/' + str(image_name).split('.')[0] + '.png')
+    plt.clf()
 
 def parse_args():
     """Parse input arguments."""
@@ -155,8 +156,6 @@ if __name__ == '__main__':
 
     limit = 100
     count = 0
-    namez = ["n03180011_6930.JPEG", "n03180011_8062.JPEG", "n03180011_5662.JPEG"]
-    #for im_name in namez:
     for im_name in im_names:
         if limit < count:
             break

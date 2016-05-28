@@ -1,11 +1,10 @@
 #!/bin/bash
 # Usage:
-# ./experiments/scripts/faster_rcnn_end2end.sh GPU NET DATASET [options args to {train,test}_net.py]
+# ./experiments/scripts/faster_rcnn_end2end.sh GPU NET MODEL DATASET [options args to {train,test}_net.py]
 # DATASET is either pascal_voc or coco.
 #
 # Example:
-# ./experiments/scripts/faster_rcnn_end2end.sh 0 VGG_CNN_M_1024 pascal_voc \
-#   --set EXP_DIR foobar RNG_SEED 42 TRAIN.SCALES "[400, 500, 600, 700]"
+#	./experiments/scripts/faster_rcnn_end2end.sh 0 VGG!6 ./data/imagenet_models/VGG16.v3.caffemodel ir
 
 set -x
 set -e
@@ -15,8 +14,8 @@ export PYTHONUNBUFFERED="True"
 GPU_ID=$1
 NET=$2
 NET_lc=${NET,,}
-DATASET=$3
-#NET_FINAL=$4
+NET_FINAL=$3
+DATASET=$4
 
 array=( $@ )
 len=${#array[@]}
@@ -36,6 +35,10 @@ case $DATASET in
     TEST_IMDB="desktops_test"
     PT_DIR="imagenet"
     ;;
+  ir)
+    TEST_IMDB="ir_test"
+    PT_DIR="imagenet"
+    ;;
   *)
     echo "No dataset given"
     exit
@@ -45,10 +48,6 @@ esac
 LOG="experiments/logs/test_end2end_${NET}_${EXTRA_ARGS_SLUG}.txt.`date +'%Y-%m-%d_%H-%M-%S'`"
 exec &> >(tee -a "$LOG")
 echo Logging output to "$LOG"
-
-#set +x
-NET_FINAL='/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/imagenet_train/vgg16_faster_rcnn_iter_3000.caffemodel'
-#set -x
 
 time ./tools/test_net.py --gpu ${GPU_ID} \
   --def models/${PT_DIR}/${NET}/faster_rcnn_end2end/test.prototxt \

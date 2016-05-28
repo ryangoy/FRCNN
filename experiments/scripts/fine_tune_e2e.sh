@@ -1,10 +1,10 @@
 #!/bin/bash
 # Usage:
-# ./experiments/scripts/faster_rcnn_end2end.sh GPU NET DATASET ITERS [options args to {train,test}_net.py]
+# ./experiments/scripts/faster_rcnn_end2end.sh GPU NET MODEL DATASET ITERS [options args to {train,test}_net.py]
 # DATASET is either pascal_voc, coco, imagenet, or ir.
 #
 # Example:
-# ./experiments/scripts/faster_rcnn_end2end.sh 0 VGG16 imagenet 10000
+# ./experiments/scripts/faster_rcnn_end2end.sh 0 VGG16 ./data/imagenet_models VGG16.v3.caffemodel imagenet 10000
 
 set -x
 set -e
@@ -13,9 +13,10 @@ export PYTHONUNBUFFERED="True"
 
 GPU_ID=$1
 NET=$2
-#NET_lc=${NET,,}
-DATASET=$3
-ITERS=$4
+NET_lc=${NET,,}
+MODEL=$3
+DATASET=$4
+ITERS=$5
 
 array=( $@ )
 len=${#array[@]}
@@ -29,8 +30,8 @@ case $DATASET in
     PT_DIR="pascal_voc"
     ;;
   coco)
-    TRAIN_IMDB="desktops_train"
-    #TRAIN_IMDB="coco_2014_train"
+    #TRAIN_IMDB="desktops_train"
+    TRAIN_IMDB="coco_2014_train"
     TEST_IMDB="coco_2014_minival"
     PT_DIR="coco"
     ;;
@@ -56,13 +57,11 @@ echo Logging output to "$LOG"
 echo "$PT_DIR"
 time ./tools/train_net.py --gpu ${GPU_ID} \
   --solver ./models/${PT_DIR}/${NET}/faster_rcnn_end2end/solver.prototxt \
-  --weights ./data/${PT_DIR}_models/${NET}.v3.caffemodel \
+  --weights ${MODEL} \
   --imdb ${TRAIN_IMDB} \
   --iters ${ITERS} \
   --cfg ./experiments/cfgs/faster_rcnn_end2end.yml \
   ${EXTRA_ARGS}
-#--weights data/${PT_DIR}_models/${NET}.v2.caffemodel \
-#   --weights models/coco/${NET}/faster_rcnn_end2end/coco_vgg16_faster_rcnn_final.caffemodel \
 set +x
 NET_FINAL=`grep -B 1 "done solving" ${LOG} | grep "Wrote snapshot" | awk '{print $4}'`
 set -x

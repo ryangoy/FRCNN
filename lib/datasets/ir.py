@@ -27,6 +27,8 @@ class ir(imdb):
         self._devkit_path = self._get_default_path() if devkit_path is None \
                             else devkit_path
         self._data_path = os.path.join(self._devkit_path, 'ir')
+
+	## COCO CLASSES ##
 	#self._classes =('__background__', 
 	#		'person', 'bicycle', 'car', 'motorcycle', 'airplane', 
 	#		'bus','train', 'truck', 'boat', 'traffic light', 

@@ -42,7 +42,7 @@ case $DATASET in
     TRAIN_IMDB="desktops_train"
     TEST_IMDB="desktops_test"
     PT_DIR="imagenet"
-    ITERS=20
+    ITERS=2000
     ;;
   *)
     echo "No dataset given"
