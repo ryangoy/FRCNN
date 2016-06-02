@@ -17,10 +17,10 @@ NET_lc=${NET,,}
 MODEL=$3
 DATASET=$4
 ITERS=$5
-
+MODEL='/home/ryan/vision/py-faster-rcnn/models/ir/vgg16_faster_rcnn_iter_1000.caffemodel'
 array=( $@ )
 len=${#array[@]}
-EXTRA_ARGS=${array[@]:4:$len}
+EXTRA_ARGS=${array[@]:5:$len}
 EXTRA_ARGS_SLUG=${EXTRA_ARGS// /_}
 
 case $DATASET in

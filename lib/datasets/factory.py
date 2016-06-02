@@ -17,8 +17,8 @@ import numpy as np
 import datasets.imagenet
 
 ##### FOR NEW DATASETS CHANGE DEVKIT PATH #####
-ir_devkit_path = '/home/ryan/vision/ir_dataset/'
-imagenet_devkit_path = 'home/ryan/vision/computer_dataset/'
+ir_devkit_path = '/home/ryan/datasets/ir_dataset/'
+imagenet_devkit_path = '/home/ryan/datasets/computer_dataset/'
 
 for split in ['train', 'val', 'val1', 'val2', 'test']:
     name = 'imagenet_{}'.format(split)

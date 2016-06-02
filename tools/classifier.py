@@ -80,7 +80,7 @@ def demo(net, image_name):
            '{:d} object proposals').format(timer.total_time, boxes.shape[0])
 
     # Visualize detections for each class
-    CONF_THRESH = 0.8
+    CONF_THRESH = 0.5
     NMS_THRESH = 0.3
     for cls_ind in range(1,scores.shape[1]):
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind+1)]
@@ -129,7 +129,8 @@ if __name__ == '__main__':
     #                          NETS[args.demo_net][1])
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/imagenet_train/vgg16_faster_rcnn_iter_1000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v2.caffemodel'
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_1000.caffemodel'
+    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_1600.caffemodel'
+    #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v3.caffemodel'
     if not os.path.isfile(caffemodel):
         raise IOError(('{:s} not found.\nDid you run ./data/script/'
                        'fetch_faster_rcnn_models.sh?').format(caffemodel))
