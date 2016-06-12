@@ -18,6 +18,7 @@ MODEL=$3
 DATASET=$4
 ITERS=$5
 MODEL='/home/ryan/vision/py-faster-rcnn/models/ir/vgg16_faster_rcnn_iter_1000.caffemodel'
+MODEL='/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v2.caffemodel'
 array=( $@ )
 len=${#array[@]}
 EXTRA_ARGS=${array[@]:5:$len}

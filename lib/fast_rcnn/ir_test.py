@@ -289,6 +289,9 @@ def test_net(net, imdb, max_per_image=100, thresh=0.5, vis=False):
     det_file = os.path.join(output_dir, 'detections.pkl')
     with open(det_file, 'wb') as f:
         cPickle.dump(all_boxes, f, cPickle.HIGHEST_PROTOCOL)
-
-    print 'Evaluating detections'
-    imdb.evaluate_detections(all_boxes, output_dir)
+    
+    np_boxes = np.array(all_boxes)
+    np.save('/home/ryan/vision/np_boxes', np_boxes)
+    with open('/home/ryan/vision/box_file.txt', 'w') as k:
+        k.write(str(all_boxes))
+    print 'Saved to /home/ryan/vision/box_file.txt'

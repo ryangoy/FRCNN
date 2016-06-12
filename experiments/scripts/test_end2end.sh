@@ -4,7 +4,7 @@
 # DATASET is either pascal_voc or coco.
 #
 # Example:
-#	./experiments/scripts/faster_rcnn_end2end.sh 0 VGG!6 ./data/imagenet_models/VGG16.v3.caffemodel ir
+#	./experiments/scripts/test_end2end.sh 0 VGG16 ./data/imagenet_models/VGG16.v3.caffemodel ir
 
 set -x
 set -e
@@ -19,7 +19,7 @@ DATASET=$4
 
 array=( $@ )
 len=${#array[@]}
-EXTRA_ARGS=${array[@]:3:$len}
+EXTRA_ARGS=${array[@]:4:$len}
 EXTRA_ARGS_SLUG=${EXTRA_ARGS// /_}
 
 case $DATASET in

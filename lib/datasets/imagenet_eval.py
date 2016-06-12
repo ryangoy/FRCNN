@@ -92,11 +92,11 @@ def imagenet_eval(detpath,
     # assumes annotations are in annopath.format(imagename)
     # assumes imagesetfile is a text file with each line an image name
     # cachedir caches the annotations in a pickle file
-    print detpath
-    print annopath
-    print imagesetfile
-    print classname
-    print cachedir
+    #print detpath
+    #print annopath
+    #print imagesetfile
+    #print classname
+    #print cachedir
 
     # first load gt
     if not os.path.isdir(cachedir):
@@ -105,9 +105,9 @@ def imagenet_eval(detpath,
     # read list of images
     with open(imagesetfile, 'r') as f:
         lines = f.readlines()
-    imagenames = [x.strip() for x in lines]
-
-    if not os.path.isfile(cachefile):
+    imagenames = [x.strip().rstrip() for x in lines]
+    #if not os.path.isfile(cachefile):
+    if True:
         # load annots
         recs = {}
         for i, imagename in enumerate(imagenames):
@@ -148,10 +148,8 @@ def imagenet_eval(detpath,
     BB = np.array([[float(z) for z in x[2:]] for x in splitlines])
 
     # sort by confidence
-    print 'len confidence is ' + str(len(confidence))
     sorted_ind = np.argsort(-confidence)
     sorted_scores = np.sort(-confidence)
-    print len(BB)
     BB = BB[sorted_ind, :]
     image_ids = [image_ids[x] for x in sorted_ind]
 

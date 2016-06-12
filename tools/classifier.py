@@ -43,8 +43,8 @@ def vis_detections(im, class_name, dets, thresh=0.5):
     ax.imshow(im, aspect='equal')
     for i in inds:
         bbox = dets[i, :4]
+	print bbox
         score = dets[i, -1]
-
         ax.add_patch(
             plt.Rectangle((bbox[0], bbox[1]),
                           bbox[2] - bbox[0],
@@ -60,7 +60,7 @@ def vis_detections(im, class_name, dets, thresh=0.5):
                   'p({} | box) >= {:.1f}').format(class_name, class_name,
                                                   thresh),
                   fontsize=14)
-    plt.axis('off')
+    plt.axis('on')
     plt.tight_layout()
     plt.draw()
 
@@ -70,7 +70,6 @@ def demo(net, image_name):
     # Load the demo image
     im_file = os.path.join(args.folder_path, image_name)
     im = cv2.imread(im_file)
-
     # Detect all object classes and regress object bounds
     timer = Timer()
     timer.tic()
@@ -129,7 +128,8 @@ if __name__ == '__main__':
     #                          NETS[args.demo_net][1])
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/imagenet_train/vgg16_faster_rcnn_iter_1000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v2.caffemodel'
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_1600.caffemodel'
+    #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_2600.caffemodel'
+    caffemodel = '/home/ryan/vision/py-faster-rcnn/data/ir_models/imgnet_uic_1000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v3.caffemodel'
     if not os.path.isfile(caffemodel):
         raise IOError(('{:s} not found.\nDid you run ./data/script/'
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 	if f != '.DS_Store':
 	    im_names.append(f)
 
-    limit = 100
+    limit = 500 
     count = 0
     for im_name in im_names:
         if limit < count:
