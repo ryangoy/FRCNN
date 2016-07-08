@@ -224,7 +224,7 @@ def apply_nms(all_boxes, thresh):
             nms_boxes[cls_ind][im_ind] = dets[keep, :].copy()
     return nms_boxes
 
-def test_net(net, imdb, max_per_image=100, thresh=0.5, vis=False):
+def test_net(net, imdb, max_per_image=100, thresh=0.7, vis=False):
     """Test a Fast R-CNN network on an image database."""
     num_images = len(imdb.image_index)
     # all detections are collected into:
@@ -289,9 +289,9 @@ def test_net(net, imdb, max_per_image=100, thresh=0.5, vis=False):
     det_file = os.path.join(output_dir, 'detections.pkl')
     with open(det_file, 'wb') as f:
         cPickle.dump(all_boxes, f, cPickle.HIGHEST_PROTOCOL)
-    
-    np_boxes = np.array(all_boxes)
-    np.save('/home/ryan/vision/np_boxes', np_boxes)
+	formatted_boxes = np.array(all_boxes)[1,:]    
+    np.save('/home/ryan/vision/np_boxes.npy', formatted_boxes)
     with open('/home/ryan/vision/box_file.txt', 'w') as k:
-        k.write(str(all_boxes))
+        k.write(str(formatted_boxes))
     print 'Saved to /home/ryan/vision/box_file.txt'
+    print 'numpy file saved to /home/ryan/vision/np_boxes.npy'

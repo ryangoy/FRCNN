@@ -4,7 +4,7 @@
 # DATASET is either pascal_voc, coco, imagenet, or ir.
 #
 # Example:
-# ./experiments/scripts/faster_rcnn_end2end.sh 0 VGG16 ./data/imagenet_models VGG16.v3.caffemodel imagenet 10000
+# ./experiments/scripts/fine_tune_e2e.sh 0 VGG16 ./data/imagenet_models/VGG16.v2.caffemodel ir 10006
 
 set -x
 set -e

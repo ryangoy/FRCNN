@@ -46,7 +46,7 @@ class ir(imdb):
 	#		'remote', 'keyboard', 'cell phone', 'microwave', 'oven',
 	#		'toaster', 'sink', 'refrigerator', 'book', 'clock', 
 	#		'vase', 'scissors', 'teddy bear', 'hair drier','toothbrush')
-	self._classes =('__background__', 'n03180011')
+	self._classes =('__background__', 'tv')
 	#self._classes = ('__background__', 'tv')
         self._class_to_ind = dict(zip(self.classes, xrange(self.num_classes)))
         self._image_ext = '.jpg'

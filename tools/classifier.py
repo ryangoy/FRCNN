@@ -25,7 +25,7 @@ import scipy.io as sio
 import caffe, os, sys, cv2
 import argparse
 
-CLASSES = ('__background__', 'n03180011')
+CLASSES = ('__background__', 'tv')
 
 NETS = {'vgg16': ('VGG16',
                   'VGG16_faster_rcnn_final.caffemodel'),
@@ -98,7 +98,7 @@ def demo(net, image_name):
     #    keep = nms(dets, NMS_THRESH)
     #    dets = dets[keep, :]
     #    vis_detections(im, cls, dets, thresh=CONF_THRESH)
-    plt.savefig('/home/ryan/vision/output/' + str(image_name).split('.')[0] + '.png')
+    plt.savefig('/home/ryan/vision/output/' + str(image_name).split('.')[0] + '.jpg')
     plt.clf()
 
 def parse_args():
@@ -128,8 +128,8 @@ if __name__ == '__main__':
     #                          NETS[args.demo_net][1])
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/imagenet_train/vgg16_faster_rcnn_iter_1000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v2.caffemodel'
-    #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_2600.caffemodel'
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/data/ir_models/imgnet_uic_1000.caffemodel'
+    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_28000.caffemodel'
+    #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/ir_models/imgnet_uic_20000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v3.caffemodel'
     if not os.path.isfile(caffemodel):
         raise IOError(('{:s} not found.\nDid you run ./data/script/'
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 	if f != '.DS_Store':
 	    im_names.append(f)
 
-    limit = 500 
+    limit = 2000 
     count = 0
     for im_name in im_names:
         if limit < count:
