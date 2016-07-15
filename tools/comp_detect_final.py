@@ -46,7 +46,7 @@ import time, os, sys
 
 #### PARAMS ####
 MODEL = './models/ir/imgnet_uic_1000.caffemodel'
-MODEL = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_28000.caffemodel'
+MODEL = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_40000.caffemodel'
 CFG = './experiments/cfgs/faster_rcnn_end2end.yml'
 GPU = 0
 PROTOTXT = './models/imagenet/VGG16/faster_rcnn_end2end/test.prototxt'

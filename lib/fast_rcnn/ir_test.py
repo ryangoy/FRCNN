@@ -290,8 +290,8 @@ def test_net(net, imdb, max_per_image=100, thresh=0.7, vis=False):
     with open(det_file, 'wb') as f:
         cPickle.dump(all_boxes, f, cPickle.HIGHEST_PROTOCOL)
 	formatted_boxes = np.array(all_boxes)[1,:]    
-    np.save('/home/ryan/vision/np_boxes.npy', formatted_boxes)
+    np.save('/home/ryan/datasets/ir_dataset/np_boxes.npy', formatted_boxes)
     with open('/home/ryan/vision/box_file.txt', 'w') as k:
         k.write(str(formatted_boxes))
     print 'Saved to /home/ryan/vision/box_file.txt'
-    print 'numpy file saved to /home/ryan/vision/np_boxes.npy'
+    print 'numpy file saved to /home/ryan/datasets/ir_dataset/np_boxes.npy'

@@ -128,7 +128,7 @@ if __name__ == '__main__':
     #                          NETS[args.demo_net][1])
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/imagenet_train/vgg16_faster_rcnn_iter_1000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v2.caffemodel'
-    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_28000.caffemodel'
+    caffemodel = '/home/ryan/vision/py-faster-rcnn/output/faster_rcnn_end2end/ir_train/vgg16_faster_rcnn_iter_40000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/ir_models/imgnet_uic_20000.caffemodel'
     #caffemodel = '/home/ryan/vision/py-faster-rcnn/data/imagenet_models/VGG16.v3.caffemodel'
     if not os.path.isfile(caffemodel):
